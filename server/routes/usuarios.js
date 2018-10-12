@@ -4,8 +4,9 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const Usuario = require('../models/users')
 
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/authentication');
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
     let desde = Number(req.query.desde) || 0
     let limite = Number(req.query.limite) || 5
     Usuario.find({ "estado": true }, 'role estado google nombre email')
@@ -35,7 +36,7 @@ app.get('/usuario', function(req, res) {
         })
 })
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let body = req.body
 
@@ -60,22 +61,23 @@ app.post('/usuario', function(req, res) {
     })
 })
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
 
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
-        if (err) {
+        if (err || !usuarioDB) {
             return res.status(400).json({
                 ok: false,
-                err
+                err: !usuarioDB ? { message: "Id no existente" } : err
             });
         }
         res.json({
             ok: true,
-            usuario: usuarioDB
+            usuario: usuarioDB,
+            g: true
         })
     })
 
@@ -99,7 +101,7 @@ app.put('/usuario/:id', function(req, res) {
     });
 }) */
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     let id = req.params.id;
     let body = {
         estado: false

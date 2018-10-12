@@ -6,6 +6,14 @@ process.env.PORT = process.env.PORT || 3000;
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
+// Vencimineto TOKEN
+
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 60 * 24 * 3;
+
+// SEED firma, semmilla de autenticacion
+
+process.env.SEED = process.env.SEED || 'seed-por-defecto';
+
 // Base de datos
 let urlDB;
 

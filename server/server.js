@@ -9,7 +9,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(require("./routes/usuarios").app);
+// configuracion global de rutas
+app.use(require("./routes/index").app);
 
 mongoose.connect(process.env.URLDB, (err, res) => {
     if (err) {
