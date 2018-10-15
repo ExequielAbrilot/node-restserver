@@ -8,7 +8,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // Vencimineto TOKEN
 
-process.env.CADUCIDAD_TOKEN = 60 * 60 * 60 * 24 * 3;
+process.env.CADUCIDAD_TOKEN = '48h';
 
 // SEED firma, semmilla de autenticacion
 
